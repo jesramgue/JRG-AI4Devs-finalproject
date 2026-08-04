@@ -47,3 +47,30 @@ export interface WasteMetricsResponse {
 export function getWasteMetrics(): Promise<WasteMetricsResponse> {
   return requestJson<WasteMetricsResponse>("/insights/waste", { method: "GET" });
 }
+
+export interface SupermarketPrice {
+  supermarket: string;
+  referencePriceEur: string;
+  effectiveDate: string;
+}
+
+export interface PriceComparisonReceiptContext {
+  latestUnitPriceEur: string | null;
+  latestObservedAt: string | null;
+}
+
+export interface PriceComparisonResponse {
+  normalizedName: string;
+  found: boolean;
+  prices: SupermarketPrice[];
+  receiptContext: PriceComparisonReceiptContext;
+  delta: string | null;
+  unavailableReason: "NO_REFERENCE_DATA" | null;
+}
+
+export function getPriceComparison(itemName: string): Promise<PriceComparisonResponse> {
+  const params = new URLSearchParams({ normalizedName: itemName });
+  return requestJson<PriceComparisonResponse>(`/insights/price-comparison?${params.toString()}`, {
+    method: "GET",
+  });
+}

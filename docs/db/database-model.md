@@ -100,6 +100,9 @@ erDiagram
     USER ||--o| PUSH_SUBSCRIPTION : registers
     USER ||--o{ USER_CATEGORY_EXPIRY_PREFERENCE : learns
 
+    %% PRICE_CATALOG_ITEM is a standalone reference dataset, matched by normalized_name
+    %% at query time — no FK relationship to any other entity.
+
     USER {
         uuid id PK
         text email UK
@@ -264,6 +267,18 @@ erDiagram
         float average_delta
         integer sample_count
         timestamptz updated_at
+    }
+
+    PRICE_CATALOG_ITEM {
+        uuid id PK
+        text normalized_name
+        text category
+        text supermarket
+        decimal reference_price_eur
+        text currency_code
+        date effective_date
+        text source_label
+        timestamptz created_at
     }
 ```
 
@@ -461,6 +476,22 @@ erDiagram
   - unique(user_id, category).
 - Relationships:
   - Many preference rows per user.
+
+### PRICE_CATALOG_ITEM
+- Purpose: Manually curated reference price for a product at a given Spanish supermarket
+  chain, used by the price-comparison feature (EXT-011). No live/external price
+  integration is used — see EXT-011 for rationale.
+- Attributes: id, normalized_name, category, supermarket, reference_price_eur,
+  currency_code, effective_date, source_label, created_at.
+- PK: id.
+- FKs: none (not user-scoped; a shared reference dataset).
+- Constraints:
+  - reference_price_eur >= 0.
+- Relationships:
+  - None to other entities; matched against PANTRY_ITEM/RECEIPT_ITEM at query time by
+    normalized_name, one row per (normalized_name, supermarket, effective_date).
+- Index: (normalized_name, supermarket, effective_date) — latest effective_date per
+  supermarket is selected at read time.
 
 ## 4. Normalization Review
 

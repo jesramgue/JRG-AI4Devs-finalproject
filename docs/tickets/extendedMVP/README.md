@@ -28,6 +28,7 @@ Same as MVP: single unified sequence `EXT-XXX`. Technology is metadata within ea
 | [EXT-007](./EXT-007-expiry-learning.md) | Automatic Expiry Learning from User Overrides | P2 | Medium |
 | [EXT-009](./EXT-009-gamification.md) | Gamification and Achievement System | P2 | Medium |
 | [EXT-010](./EXT-010-consumption-automation.md) | Consumption Automation for Long-Expired Items | P2 | Medium |
+| [EXT-011](./EXT-011-multi-supermarket-price-catalog.md) | Multi-Supermarket Price Comparison (Static Catalog) | P2 | Medium |
 
 ## Recommended implementation sequence (Phase 2)
 
@@ -37,6 +38,7 @@ EXT-006 (barcode scan)    ← independent, free tools
 EXT-007 (expiry learning) ← extends existing expiration module
 EXT-009 (gamification)    ← new module, hooks into pantry events
 EXT-010 (automation)      ← hooks into pantry + notifications
+EXT-011 (price catalog)   ← revives TKT-006/EXT-008 as a static, multi-chain catalog
 ```
 
 Then Phase 1:
